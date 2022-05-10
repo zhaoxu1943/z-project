@@ -40,7 +40,7 @@ public class DmTest {
             System.out.println("Connecting to DM Server...");
             conn = DriverManager.getConnection(urlString, userName, password);
             //3. 创建表
-            create();
+            //create();
 
             //4. 插入数据
             insert();
@@ -80,7 +80,7 @@ public class DmTest {
                     + "\"txt\")VALUES(?,?);";
             pstate = conn.prepareStatement(sql_insert);
             pstate.setString(1, UUID.randomUUID().toString());
-            pstate.setString(2, data);
+            pstate.setString(2, "ewqewqe");
             pstate.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());

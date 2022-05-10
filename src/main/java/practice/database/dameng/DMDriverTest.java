@@ -37,10 +37,10 @@ public class DMDriverTest {
             Class.forName(DRIVER_DM);
             connection = DriverManager.getConnection(URL_DM,USER_NAME_DM,PASSWORD_DM);
             //sql
+
             //String sql = "select dbms_metadata.get_ddl('TABLE','TEST_BIG_DATA','wilkinson') from dual";
 
-            String sql = "select id,txt from wilkinson.TEST_BIG_DATA";
-
+            String sql = "select txt from wilkinson.TEST_BIG_DATA";
 
             //创建preparedStatement
             preparedStatement = connection.prepareStatement(sql);
@@ -49,7 +49,7 @@ public class DMDriverTest {
 
             while (resultSet.next()){
                 //System.out.println(resultSet.getString("id"));
-                System.out.println(resultSet.getString(2));
+                System.out.println(resultSet.getString(1));
 
             }
         }catch (Exception e){
