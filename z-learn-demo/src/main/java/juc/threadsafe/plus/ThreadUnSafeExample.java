@@ -1,4 +1,4 @@
-package practice.juc.threadsafe.plus;
+package juc.threadsafe.plus;
 
 public class ThreadUnSafeExample {
 

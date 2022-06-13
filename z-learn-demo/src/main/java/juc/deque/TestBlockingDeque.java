@@ -1,6 +1,4 @@
-package practice.juc.deque;
-
-import org.jetbrains.annotations.NotNull;
+package juc.deque;
 
 import java.util.HashSet;
 import java.util.Set;

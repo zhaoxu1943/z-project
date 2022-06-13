@@ -1,4 +1,4 @@
-package practice.algorithm.util;
+package util;
 
 import java.util.Arrays;
 import java.util.stream.Stream;

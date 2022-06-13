@@ -1,7 +1,5 @@
-package practice.juc.threadsafe.plus;
+package juc.threadsafe.plus;
 
-
-import org.springframework.util.Assert;
 
 public class Main {
 

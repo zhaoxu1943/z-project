@@ -1,4 +1,4 @@
-package practice.database.dameng;
+package database.dameng;
 
 import java.sql.*;
 
