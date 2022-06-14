@@ -1,7 +1,5 @@
 package sort;
 
-import practice.algorithm.util.PrintUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
