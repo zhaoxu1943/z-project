@@ -1,11 +1,9 @@
 package blockingqueue;
 
-import cn.hutool.system.UserInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import entity.Student;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
