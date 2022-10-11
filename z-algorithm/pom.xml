@@ -11,5 +11,12 @@
 
     <artifactId>z-algorithm</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.z</groupId>
+            <artifactId>z-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
+    </dependencies>
 </project>
