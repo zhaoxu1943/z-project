@@ -24,17 +24,17 @@ public class BinaryTreeDepth {
      * @throws
      * @author zhaoxu
      */
-    private  int getDepth(TreeNode node) {
+    private  int getDepth(TreeNode root) {
         //grand
-        if (node==null){
+        if (root==null){
             return depth;
         }
         //临界条件
-        if (node.getLeft()==null&&node.getRight() == null) {
+        if (root.getLeft()==null&&root.getRight() == null) {
             return depth;
         }else {
             depth++;
-            return Math.max(getDepth(node.getLeft()),getDepth(node.getRight()));
+            return Math.max(getDepth(root.getLeft()),getDepth(root.getRight()));
         }
 
     }
