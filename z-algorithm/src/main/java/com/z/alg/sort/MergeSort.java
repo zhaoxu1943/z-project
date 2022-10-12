@@ -14,9 +14,22 @@ public class MergeSort {
     }
 
 
-
+    /**
+     * 递归终止条件
+     * array size = 1
+     * @param
+     * @return
+     * @throws
+     * @author zhaoxu
+     */
     public static List<Integer> mergeSort(List<Integer> numList) {
         List<Integer> sortedList = new ArrayList<>();
+
+        //终止条件
+        if (numList.size()==1){
+            return numList;
+        }
+
         if (numList.size()>1) {
             int mid = numList.size()/2;
             List<Integer> leftArr = new ArrayList<>(numList.subList(0,mid));
