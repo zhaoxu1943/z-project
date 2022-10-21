@@ -1,4 +1,4 @@
-package com.z.alg.sort;
+package com.z.alg.sort.merge;
 
 import java.util.ArrayList;
 import java.util.Arrays;
