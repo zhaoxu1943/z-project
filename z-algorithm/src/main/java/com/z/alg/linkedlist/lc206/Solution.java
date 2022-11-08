@@ -62,6 +62,30 @@ import com.z.common.base.ListNode;
  *
  *
  * save ->reverse->go ahead!
+ *
+ * 看改几条边?
+ * reverse 要改n条边,而不是n-1条
+ *
+ * 1-->2-->3-->4-->5-->null
+ *
+ * 老师思路:
+ * 1 . 明确改几条边? 5条
+ * 2. 咋改, next 改为last
+ * 3. last没有!
+ * 4. 创造last,解决问题
+ * we need prev pointer;
+ * so wo create it
+ *
+ *
+ *
+ * 访问链表的模板:
+ * while(head!=null) {
+ * head = head.next;
+ * }
+ *
+ * 如果while中使用 head.next!=null
+ * 少了最后的节点,访问了n-1个节点
+ *
  */
 class Solution {
     //use head, please reverse the linkedlist
@@ -72,12 +96,13 @@ class Solution {
         while(fast!=null) {
             //save
             ListNode temp = fast.next;
-            //reverse
+            //reverse,改边
             fast.next = slow;
-            //go ahead
+            //go ahead,后移一位的基本操作
             slow = fast;
             fast = temp;
         }
+        //终局 fast == null,终止,此时fast =null, so return slow!
         return slow;
     }
 }
