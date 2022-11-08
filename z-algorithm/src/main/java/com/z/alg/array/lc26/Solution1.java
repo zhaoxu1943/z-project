@@ -87,20 +87,6 @@ import java.util.Arrays;
 class Solution1 {
     public int removeDuplicates(int[] nums) {
 
-
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i]!=nums[i-1]) {
-
-            }
-
-        }
-
-
-
-
-
-
-
         //思路: for循环*2,双循序寻找重复元素,实际上并没有利用
         // '有序'的条件
         for (int i = 0; i < nums.length; i++) {
