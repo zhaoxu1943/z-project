@@ -8,6 +8,7 @@
         <module>z-work-demo</module>
         <module>z-learn-demo</module>
         <module>z-common</module>
+        <module>z-read-source</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -51,7 +52,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.0.M3</version>
+            <version>5.8.8</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
