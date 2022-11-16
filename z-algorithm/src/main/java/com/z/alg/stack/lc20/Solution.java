@@ -5,6 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ * stack
+ *
+ *
+ * @param
+ * @return
+ * @throws
+ * @author zhaoxu
+ */
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isValid(String s) {
