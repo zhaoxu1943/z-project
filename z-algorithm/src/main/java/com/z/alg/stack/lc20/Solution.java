@@ -6,7 +6,14 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
- * stack
+ * stack ?
+ * stack relation problem:
+ *
+ * 最近相关性问题,用栈
+ *
+ * 本题 lc20,并不是中心对称的括号,而是一个个闭合括号组成
+ *
+ * 当然中心括号也是可以的
  *
  *
  * @param
@@ -38,5 +45,16 @@ class Solution {
         }
 
         return stack.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        String s = "}}{{{";
+        Solution solution = new Solution();
+        solution.isValid(s);
+
+        String s1 = "{([])}";
+        solution.isValid(s1);
+
+
     }
 }
