@@ -1,4 +1,4 @@
-package com.z.work.blockingqueue;
+package com.z.work.juc.blockingqueue;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
