@@ -83,6 +83,8 @@ import java.util.Stack;
  * 不像+ * 无所谓顺序
  * 首先pop出来的是第二个数num2
  * 应该是num1 op num2
+ *
+ * for example 3 2 + 2 * = 10
  * @param
  * @return
  * @throws
@@ -125,7 +127,7 @@ class Solution {
     public static void main(String[] args) {
 
        Solution solution = new Solution();
-       String[] tokens = new String[]{"-128","-128","*","-128","*","-128","*","8","*","-1","*"};
+       String[] tokens = new String[]{"3","2","+","2","*"};
        log.info("result:{}",solution.evalRPN(tokens));
     }
 }
