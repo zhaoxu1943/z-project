@@ -58,14 +58,19 @@ class Solution {
     //思路:调度场算法将中缀转后缀-->再基于后缀表达式运算求值
     public int calculate(String s) {
         //step1 : 字符串的解析,我们看到支持的符号有'+'、'-'、'('、')',以及space
-        String opPlus = "+";
-        String opJian = "-";
+        String opChengFang = "^";
+
         String opCheng = "*";
         String opChu = "/";
+
+        String opPlus = "+";
+        String opJian = "-";
+
+        //special
         String opZuoKuo = "(";
         String opYouKuo = ")";
         String opSpace = " ";
-        String opChengFang = "^";
+
 
         Map<String,Integer> opMap = new HashMap<>();
         opMap.put(opChengFang,1);
@@ -94,7 +99,10 @@ class Solution {
 
         //convert
         String[]  originArr = s.split("");
+        for(String c :originArr) {
 
+
+        }
 
 
 
