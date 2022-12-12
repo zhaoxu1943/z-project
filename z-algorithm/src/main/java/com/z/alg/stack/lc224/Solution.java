@@ -94,12 +94,14 @@ class Solution {
             String chiStr = String.valueOf(charArr[i]);
             //遇见左括号,入符号栈
             if(opZuoKuo.equals(chiStr)){
-                opStack.addLast(chiStr);
+                opStack.push(chiStr);
             }else if(opYouKuo.equals(chiStr)){
                 //遇见右括号,开始出栈
                 while(!opStack.isEmpty()&&!opZuoKuo.equals(opStack.peek())) {
                    outputQueue.addLast(opStack.pop());
                 }
+                //左括号出栈
+                opStack.pop();
             }else{
                 //完整的取数字,加入
                 if(isNum(chi)) {
@@ -147,6 +149,12 @@ class Solution {
             }
 
         }
+
+        //final output all
+        while(!opStack.isEmpty()){
+            outputQueue.addLast(opStack.pop());
+        }
+
 
         String[] houzhui = outputQueue.toArray(new String[0]);
 

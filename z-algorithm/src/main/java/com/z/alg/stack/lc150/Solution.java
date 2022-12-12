@@ -101,7 +101,7 @@ class Solution {
             if (!calStack.isEmpty() && calStack.size() >=2 &&operatorSet.contains(str)) {
                 //sec
                 int num1 = calStack.pop();
-                //first
+                //first\
                 int num2 = calStack.pop();
                 if ("+".equals(str)){
                     calStack.push(Math.addExact(num1,num2));
