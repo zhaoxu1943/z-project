@@ -49,8 +49,6 @@ package com.z.alg.stack.lc224;
 // Related Topics 栈 递归 数学 字符串 👍 858 👎 0
 
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -72,9 +70,17 @@ class Solution {
         Deque<String> outputQueue = new ArrayDeque<>();
         //op栈
         Deque<String> opStack = new ArrayDeque<>();
+
         //处理空格
         //convert to charArr
         String strWithNoSpace = s.replace(" ","");
+        //处理左括号和-号之间的补0
+        strWithNoSpace = strWithNoSpace.replace("(-","(0-");
+        //处理首字符为-号时,前面需要补0
+        if (strWithNoSpace.startsWith("-")){
+            strWithNoSpace = "0".concat(strWithNoSpace);
+        }
+        //to char arr
         char[] charArr = strWithNoSpace.toCharArray();
         int charArrSize = charArr.length ;
         //init end
@@ -165,7 +171,7 @@ class Solution {
         return evalRPN(houzhui);
     }
 
-    @NotNull
+
     private static Map<String, Integer> initOpLevelMap() {
         //init阶段:初始化符号
         //等级1: ^
@@ -202,10 +208,6 @@ class Solution {
         return Character.isDigit(c);
     }
 
-
-
-
-
     public int evalRPN(String[] tokens) {
         //operator set
         Set<String> operatorSet = new HashSet<>(Arrays.asList("+","-","*","/"));
@@ -237,82 +239,16 @@ class Solution {
 
     }
 
+
+
     public static void main(String[] args) {
         Solution obj = new Solution();
-        String input = "132  +2+3*(2+5)-1*4";
+        String input = "-2+ 1";
 
         int result = obj.calculate(input);
         System.out.println(result);
 
     }
-
-    //    作者：AC_OIer
-//    链接：https://leetcode.cn/problems/basic-calculator/solution/shuang-zhan-jie-jue-tong-yong-biao-da-sh-olym/
-//    来源：力扣（LeetCode）
-//    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-class Solution1 {
-
-        public int calculate(String s) {
-            // 存放所有的数字
-            Deque<Integer> nums = new ArrayDeque<>();
-            // 为了防止第一个数为负数，先往 nums 加个 0
-            nums.addLast(0);
-            // 将所有的空格去掉
-            s = s.replaceAll(" ", "");
-            // 存放所有的操作，包括 +/-
-            Deque<Character> ops = new ArrayDeque<>();
-            int n = s.length();
-            char[] cs = s.toCharArray();
-            for (int i = 0; i < n; i++) {
-                char c = cs[i];
-                if (c == '(') {
-                    ops.addLast(c);
-                } else if (c == ')') {
-                    // 计算到最近一个左括号为止
-                    while (!ops.isEmpty()) {
-                        char op = ops.peekLast();
-                        if (op != '(') {
-                            calc(nums, ops);
-                        } else {
-                            ops.pollLast();
-                            break;
-                        }
-                    }
-                } else {
-                    if (isNum(c)) {
-                        int u = 0;
-                        int j = i;
-                        // 将从 i 位置开始后面的连续数字整体取出，加入 nums
-                        while (j < n && isNum(cs[j]))
-                            u = u * 10 + (cs[j++]);
-                        nums.addLast(u);
-                        i = j - 1;
-                    } else {
-                        if (i > 0 && (cs[i - 1] == '(' || cs[i - 1] == '+' || cs[i - 1] == '-')) {
-                            nums.addLast(0);
-                        }
-                        // 有一个新操作要入栈时，先把栈内可以算的都算了
-                        while (!ops.isEmpty() && ops.peekLast() != '(') calc(nums, ops);
-                        ops.addLast(c);
-                    }
-                }
-            }
-            while (!ops.isEmpty()) calc(nums, ops);
-            return nums.peekLast();
-        }
-        void calc(Deque<Integer> nums, Deque<Character> ops) {
-            if (nums.isEmpty() || nums.size() < 2) return;
-            if (ops.isEmpty()) return;
-            int b = nums.pollLast(), a = nums.pollLast();
-            char op = ops.pollLast();
-            nums.addLast(op == '+' ? a + b : a - b);
-        }
-        boolean isNum(char c) {
-            return Character.isDigit(c);
-        }
-    }
-
 
 
 
