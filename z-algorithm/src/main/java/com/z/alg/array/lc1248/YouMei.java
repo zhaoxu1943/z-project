@@ -86,6 +86,10 @@ public class YouMei {
         //这样遍历相当于从1开始,不再考虑0,不再考虑索引
         for (int num: nums) {
             // 如果有奇数,sum计数+1
+
+
+
+
             sum += num & 1;
             //对应的,计数数组
             prefixCnt[sum]++;
