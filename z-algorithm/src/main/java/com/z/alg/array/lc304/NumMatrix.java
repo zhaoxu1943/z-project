@@ -5,19 +5,16 @@ package com.z.alg.array.lc304;
  * @date 1/10/2023 11:09 AM
  * @since
  */
-//给定一个二维矩阵 matrix，以下类型的多个请求：
-//
+// 给定一个二维矩阵 matrix，以下类型的多个请求：
 //
 // 计算其子矩形范围内元素的总和，该子矩阵的 左上角 为 (row1, col1) ，右下角 为 (row2, col2) 。
 //
 //
 // 实现 NumMatrix 类：
 //
-//
 // NumMatrix(int[][] matrix) 给定整数矩阵 matrix 进行初始化
 // int sumRegion(int row1, int col1, int row2, int col2) 返回 左上角 (row1, col1) 、右下
-//角 (row2, col2) 所描述的子矩阵的元素 总和 。
-//
+// 角 (row2, col2) 所描述的子矩阵的元素 总和 。
 //
 //
 //
@@ -63,62 +60,62 @@ package com.z.alg.array.lc304;
 //leetcode submit region begin(Prohibit modification and deletion)
 public class NumMatrix {
 
-    private static int[][] matrix;
+    private final int[][] matrix;
 
-    public NumMatrix(int[][] matrix) {
-        this.matrix = matrix;
-    }
-    /** 0        i
-     *0 ♢♢♢♢♢
-     *  ♢▷♢♢♢
-     *  ♢♢♢♢♢
-     *j ♢♢♢♢▷
-     *
-     * 采用二维数组,矩阵前缀和公式来解决,第一步,生成矩阵前缀和
-     *
-     * @param
-     * @return
-     * @throws
+    private int[][] sumMatrix;
+
+    /**
+     * 如何规避二维前缀和数组
+     * 即创建一个m+1,n+1的数组,并进行逐行填充:
      * @author zhaoxu
      */
-    public int sumRegion(int row1, int col1, int row2, int col2) {
-        int all = getSumFrom00to(row2,col2);
-        int left = getSumFrom00to(row2,col1-1);
-        int top = getSumFrom00to(row1-1,col2);
-        int mid = getSumFrom00to(row1-1,col1-1);
-        return all - left-top +mid;
+    public NumMatrix(int[][] matrix) {
+        this.matrix = matrix;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        sumMatrix =  new int[m+1][n+1];
+        //fill
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                sumMatrix[i][j]= sumMatrix[i-1][j]+sumMatrix[i][j-1]-sumMatrix[i-1][j-1]+matrix[i-1][j-1];
+            }
+        }
     }
-
 
 
 
 
 
     /**
-     * i: row
-     * j :col
-     * 进一步优化,由于每次需要重复计算
+     *
+     * @author zhaoxu
+     */
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        int all = sumMatrix[row2+1][col2+1];
+        int left = sumMatrix[row2+1][col1];
+        int top = sumMatrix[row1][col2+1];
+        int mid = sumMatrix[row1][col1];
+        return all - left - top + mid;
+    }
+
+
+    /**
+     * 123
+     * 456
+     * 789
+     *
+     * sum 5689 = 28
      * @param
      * @return
      * @throws
      * @author zhaoxu
      */
-    public int getSumFrom00to(int rowIndex,int colIndex) {
-        int m = matrix.length;
-        int n = matrix[0].length;
-        int[][] sumMatrix =  new int[m+1][n+1];
-        //fill
-        for (int i = 0; i < m; i++) {
-            int[] tempArr = matrix[i];
-            int tempSum = 0;
-            for (int j = 0; j <= colIndex; j++) {
-                tempSum =tempSum + tempArr[j];
-            }
-            sum += tempSum;
-        }
-        return sum;
+    public static void main(String[] args) {
+        int[][] arr = new int[][]{{1,2,3},{4,5,6},{7,8,9}};
+        NumMatrix obj = new NumMatrix(arr);
+        int res = obj.sumRegion(1,1,2,2);
+        System.out.println(res);
     }
-
 
 
 
