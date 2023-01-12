@@ -7,4 +7,23 @@ package com.z.work.pipeline.base;
  */
 public interface BaseContext {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
