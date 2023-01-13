@@ -38,6 +38,17 @@ public class Solution {
      * //        S_MAX [5,9,9,15,23]
      * //
      *
+     * 通过前缀和寻找规律:
+     * 从双循环开始我们通过前缀和数组,通过更新int res,来逐渐的获取最大子段和:
+     * 但需要O(n^2)的时间复杂度
+     *
+     * 重新审视条件后
+     * sum[l,r] = sum[l] - sum[r-1]
+     * 令 i= l ,j = r-l
+     * 公式转换为 sum[i]-sum[j]
+     * 那么在固定外层循环i,也是end的情况下,求最小的sum[j]即可
+     * 如何在O(1)时间内无需循环 ,获取sum[j] : 前缀最小值!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     *
      *
      * @author zhaoxu
      */
@@ -50,32 +61,26 @@ public class Solution {
             sum += nums[i-1];
             sumArr[i] = sum;
         }
-
-
-
-
-
-
+        //2. 初始化前缀最小值为 sumArr[0]
+        int min_sumArr =  sumArr[0];
         for (int i = 1; i <  sumArr.length; i++) {
-            for (int j = 1; j <= i; j++) {
-                int temp = sumArr[i] - sumArr[j-1];
+                //维护前缀最小值
+                //该取哪一位的最小值?
+            min_sumArr = Math.min(min_sumArr,sumArr[i-1]);
+            int temp = sumArr[i] - min_sumArr;
                 if (temp>res) {
                     res =temp;
                 }
-            }
         }
         return  res;
     }
 
 
     public static void main(String[] args) {
-        int[] par_1  = new int[]{-2,1,-3,4,-1,2,1,-5,4};
+        int[] par_1  = new int[]{-1};
         Solution o = new Solution();
         int res = o.maxSubArray(par_1);
         System.out.println(res);
-
-
-
     }
 
 
