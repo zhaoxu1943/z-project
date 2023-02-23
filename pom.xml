@@ -9,6 +9,7 @@
         <module>z-learn-demo</module>
         <module>z-common</module>
         <module>z-read-source</module>
+        <module>z-game</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
