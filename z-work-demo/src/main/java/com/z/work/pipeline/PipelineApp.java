@@ -12,9 +12,9 @@ import com.z.work.pipeline.step.Extract_1;
 public class PipelineApp {
 
     public static void main(String[] args) {
-        //init context
-        ETLContext ctx =  new ETLContext("111",new Student().setName("张"));
-        Extract_1 e = new Extract_1(ctx);
+//        //init context
+//        ETLContext ctx =  new ETLContext("111",new Student().setName("张"));
+//        Extract_1 e = new Extract_1(ctx);
 
     }
 }
