@@ -10,6 +10,7 @@
         <module>z-common</module>
         <module>z-read-source</module>
         <module>z-game</module>
+        <module>z-nlp</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
