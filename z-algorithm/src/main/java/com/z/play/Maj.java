@@ -12,36 +12,33 @@ public class Maj {
 
     public static double money = 3.5d;
 
-    public static int time = 2;
-
     public static int person_3 = 3;
 
     public static int type_3 = 35000;
 
-    public static double sumAll  = type_3*time*person_3;
 
-    public static double moneyAll = money*person_3*time;
 
     public static String zhengyang = "吃肉的山羊";
     public static String zhanglei = "毒瘤小张";
 
     public static String zhaoxu = "stephen1943";
 
-    public static String CHANG_CI = "友人塌";
+    public static String CHANG_CI = "友人场";
 
-    public static String origin = "友人塌\n" +
+    public static String origin = "友人场\n" +
+            "1位 吃肉的山羊\n" +
+            "3位 stephen1943\n" +
+            "47000\n" +
+            "20700\n" +
+            "2位 毒瘤小张\n" +
+            "37300\n" +
+            "友人场\n" +
             "1位 毒瘤小张\n" +
             "3位 stephen1943\n" +
-            "57000\n" +
-            "18500\n" +
+            "92800\n" +
+            "6200\n" +
             "2位 吃肉的山羊\n" +
-            "29500\n" +
-            "友人塌\n" +
-            "1位 stephen1943\n" +
-            "3位 吃肉的山羊\n" +
-            "704002位 毒瘤小张\n" +
-            "-10800\n" +
-            "45400";
+            "18400";
 
     public static void main(String[] args) {
 
@@ -54,20 +51,37 @@ public class Maj {
                 resultMapList.add(convertStringToMap(originResultString));
             }
         }
+
+        int time = resultMapList.size();
+
+        double sumAll  = type_3*time*person_3;
+
+        double moneyAll = money*person_3*time;
+
+
         //计算
         System.out.println("扫描结果:");
 
         for (Map<String,Integer> map:resultMapList) {
             System.out.println(map);
         }
-        System.out.println("执行计算:");
 
         double sumZhao = getSum(resultMapList,zhaoxu);
         double sumZhang = getSum(resultMapList,zhanglei);
         double sumZheng = getSum(resultMapList,zhengyang);
-        System.out.println("stephen1943总分:"+sumZhao+",占比:"+sumZhao/Maj.sumAll*100+"%,钱:"+sumZhao/sumAll*moneyAll+"元");
-        System.out.println("毒瘤小张总分:"+sumZhang+",占比:"+sumZhang/Maj.sumAll*100+"%,钱:"+sumZhang/sumAll*moneyAll+"元");
-        System.out.println("吃肉的山羊总分:"+sumZheng+",占比:"+sumZheng/Maj.sumAll*100+"%,钱:"+sumZheng/sumAll*moneyAll+"元");
+
+        if (sumZhao+sumZhang+sumZheng!=sumAll){
+            throw new RuntimeException("扫描异常,扫描总分"+(sumZhao+sumZhang+sumZheng)+"不等于总分"+sumAll+"请重新扫描");
+        }
+
+        System.out.println("扫描已校验,执行计算:");
+
+
+
+        System.out.println("共打了"+time+"圈,"+"每圈"+money+"元,每人交"+money*time+"元,"+"全局总点数为"+sumAll+"点");
+        System.out.println("stephen1943总分:"+sumZhao+",占比:"+sumZhao/sumAll*100+"%,钱:"+sumZhao/sumAll*moneyAll+"元");
+        System.out.println("毒瘤小张总分:"+sumZhang+",占比:"+sumZhang/sumAll*100+"%,钱:"+sumZhang/sumAll*moneyAll+"元");
+        System.out.println("吃肉的山羊总分:"+sumZheng+",占比:"+sumZheng/sumAll*100+"%,钱:"+sumZheng/sumAll*moneyAll+"元");
 
     }
 
