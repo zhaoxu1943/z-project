@@ -9,6 +9,7 @@ import com.z.maj.exception.OcrException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -139,7 +140,10 @@ public class MajCalculate {
      */
     private void createMatchInfo() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("对局信息:");
+        stringBuilder.append("对局信息:\n");
+        stringBuilder.append("时间:");
+        stringBuilder.append(context.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        stringBuilder.append("\n");
         stringBuilder.append(context.getType());
         stringBuilder.append("人局,");
         stringBuilder.append("玩家:");

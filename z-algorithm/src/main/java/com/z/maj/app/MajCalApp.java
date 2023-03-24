@@ -5,7 +5,7 @@ import com.z.maj.core.MajContext;
 import com.z.maj.db.service.MajDataBase;
 import com.z.maj.db.MajDataBaseImpl;
 
-public class MajApp {
+public class MajCalApp {
 
 
 
@@ -31,10 +31,7 @@ public class MajApp {
 
         MajContext majContext = cal.calculate(origin);
         //进行maj存储
-        db.save(majContext);
-
-        System.out.println("1");
-
+        db.saveAfterQuery(majContext);
     }
 
 
