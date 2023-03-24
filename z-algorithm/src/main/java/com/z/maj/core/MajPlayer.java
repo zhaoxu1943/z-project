@@ -1,4 +1,4 @@
-package com.z.maj;
+package com.z.maj.core;
 
 import com.google.common.collect.Lists;
 

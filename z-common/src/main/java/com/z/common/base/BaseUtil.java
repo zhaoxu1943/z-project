@@ -1,13 +1,13 @@
 package com.z.common.base;
 
-import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * @author zhaoxu
  * @date 11/8/2022 4:20 PM
  * @since
  */
-@Slf4j
+
 public class BaseUtil {
 
 

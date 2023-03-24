@@ -1,4 +1,4 @@
-package com.z.maj;
+package com.z.maj.core;
 
 import java.math.BigDecimal;
 
@@ -17,4 +17,9 @@ public class MajConfig {
     public static String CHANG_CI = "友人场";
 
     public static String CHANG_CI_TRAD = "友人塌";
+
+
+    //db config
+    public static String DB_FILE_PATH = "src/main/resources/maj.db";
+
 }

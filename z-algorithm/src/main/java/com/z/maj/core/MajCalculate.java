@@ -1,17 +1,19 @@
-package com.z.maj;
+package com.z.maj.core;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.jetbrains.annotations.NotNull;
+import com.z.maj.exception.OcrException;
+
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.z.maj.MajConfig.*;
+import static com.z.maj.core.MajConfig.*;
 
 public class MajCalculate {
 
@@ -24,7 +26,7 @@ public class MajCalculate {
      * @param originStr 原始ocr串
      * @author zhaoxu
      */
-    public void calculate(String originStr) {
+    public MajContext calculate(String originStr) {
         //初始处理
         String processStr = initProcess(originStr);
 
@@ -42,6 +44,7 @@ public class MajCalculate {
         calculateAndValidate(resultMapList);
         //输出结果
         System.out.println(context);
+        return context;
     }
 
     private String initProcess(String originStr) {
@@ -96,7 +99,7 @@ public class MajCalculate {
      * @param spiltStr 分割字符串
      * @author zhaoxu
      */
-    @NotNull
+
     private static List<String> spilt(String originStr, String spiltStr) {
         List<String> originList = CharSequenceUtil.splitTrim(originStr, spiltStr);
         List<String> resultList = Lists.newArrayList();
@@ -116,6 +119,7 @@ public class MajCalculate {
      */
     private void initMajContext(Set<String> playerSet, int times) {
         context = new MajContext();
+        context.setId(UUID.randomUUID().toString());
         context.setPlayerNickNameSet(playerSet);
         context.setType(playerSet.size());
         context.setTime(times);
@@ -124,6 +128,7 @@ public class MajCalculate {
         }else if (context.getType()==4) {
             context.setEveryTenThousandScoreRMB(TYPE_4_EVERY_TEN_THOUSAND_SCORE_RMB);
         }
+        context.setCreateTime(LocalDateTime.now());
     }
 
 
@@ -210,7 +215,7 @@ public class MajCalculate {
      * @param originResultList 每一局stringList转化为MapList
      * @author zhaoxu
      */
-    @NotNull
+
     private List<Map<String, Integer>> convertToMap(List<String> originResultList) {
         List<Map<String,Integer>> resultMapList = Lists.newArrayList();
         for (String originResultString: originResultList){

@@ -1,4 +1,4 @@
-package com.z.maj;
+package com.z.maj.core;
 
 
 import lombok.Data;
@@ -6,12 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static cn.hutool.core.util.ArrayUtil.append;
-
 /**
  * maj上下文,
  * 初始化对局者
@@ -20,9 +18,11 @@ import static cn.hutool.core.util.ArrayUtil.append;
  * @throws
  * @author zhaoxu
  */
-@Getter
-@Setter
+@Data
 public class MajContext {
+
+
+    private String id;
 
     /**
      * 玩家昵称列表
@@ -52,6 +52,10 @@ public class MajContext {
      */
     private BigDecimal everyTenThousandScoreRMB;
 
+    private LocalDateTime createTime;
+
+
+    //计算后的字段
     private String matchInfo;
 
     private List<Map<String,Integer>> matchDetailList;

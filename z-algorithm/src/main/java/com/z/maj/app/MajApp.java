@@ -1,4 +1,9 @@
-package com.z.maj;
+package com.z.maj.app;
+
+import com.z.maj.core.MajCalculate;
+import com.z.maj.core.MajContext;
+import com.z.maj.db.MajDataBase;
+import com.z.maj.db.MajDataBaseImpl;
 
 public class MajApp {
 
@@ -7,6 +12,7 @@ public class MajApp {
     public static void main(String[] args) {
 
         MajCalculate cal = new MajCalculate();
+        MajDataBase db = new MajDataBaseImpl();
 
         String origin = "友人塌\n" +
                 "1位 sldk19\n" +
@@ -23,7 +29,10 @@ public class MajApp {
                 "26100\n" +
                 "12500";
 
-        cal.calculate(origin);
+        MajContext majContext = cal.calculate(origin);
+        //进行maj存储
+        db.save(majContext);
+
     }
 
 

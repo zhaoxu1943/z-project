@@ -1,4 +1,4 @@
-package com.z.maj;
+package com.z.maj.exception;
 
 public class OcrException extends RuntimeException{
 
