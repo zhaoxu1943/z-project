@@ -2,42 +2,27 @@ package com.z.maj.db;
 
 import cn.hutool.json.JSONUtil;
 import com.z.maj.core.MajContext;
-import com.z.maj.exception.MajException;
+import com.z.maj.db.service.MajDataBase;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import static com.z.maj.core.MajConfig.DB_FILE_PATH;
+import java.io.*;
 
 @Slf4j
-public class MajDataBaseImpl implements MajDataBase{
+public class MajDataBaseImpl implements MajDataBase {
 
     @Override
     public void save(MajContext majContext) {
         String majContextJsonStr = JSONUtil.toJsonStr(majContext);
 
-        try (OutputStream outputStream = new FileOutputStream(DB_FILE_PATH)) {
-            outputStream.write(majContextJsonStr.getBytes());
+        String path =Thread.currentThread().getContextClassLoader().getResource("maj.db").getPath();
+        File file = new File(path);
+
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(majContextJsonStr);
         } catch (IOException e) {
-            throw new MajException("maj db save error");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    public MajContext query(String id) {
-        return null;
-    }
 
-    @Override
-    public void update(MajContext majContext) {
-
-    }
-
-    @Override
-    public void delete(String id) {
-
-    }
 }
