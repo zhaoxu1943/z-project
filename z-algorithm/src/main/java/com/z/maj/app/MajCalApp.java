@@ -2,8 +2,8 @@ package com.z.maj.app;
 
 import com.z.maj.core.MajCalculate;
 import com.z.maj.core.MajContext;
-import com.z.maj.db.service.MajDataBase;
 import com.z.maj.db.MajDataBaseImpl;
+import com.z.maj.db.service.MajDataBase;
 
 public class MajCalApp {
 
@@ -15,19 +15,28 @@ public class MajCalApp {
         MajDataBase db = new MajDataBaseImpl();
 
         String origin = "友人塌\n" +
-                "1位 sldk19\n" +
-                "3位 FeiClusell\n" +
-                "2位 毒瘤小张38200\n" +
-                "4位 stephen1943\n" +
-                "19700\n" +
-                "36300\n" +
-                "5800\n" +
+                "1位 FeiClusell\n" +
+                "3位 stephen1943\n" +
+                "2位 吃肉的山羊72000\n" +
+                "4位 毒瘤小张10600\n" +
+                "24900\n" +
+                "-7500\n" +
                 "友人塌\n" +
-                "1位 毒瘤小张3位 sldk19\n" +
-                "2位 stephen194342600\n" +
-                "4位 FeiClusell18800\n" +
-                "26100\n" +
-                "12500";
+                "1位 吃肉的山羊\n" +
+                "3位 stephen1943\n" +
+                "2位 FeiClusell33500\n" +
+                "4位 毒瘤小张24700\n" +
+                "33200\n" +
+                "8600\n" +
+                "友人塌\n" +
+                "1位 吃肉的山羊\n" +
+                "3位 FeiClusell\n" +
+                "54900\n" +
+                "2位 stephen1943\n" +
+                "4位毒瘤小张16000\n" +
+                "19000\n" +
+                "10100";
+
 
         MajContext majContext = cal.calculate(origin);
         //进行maj存储

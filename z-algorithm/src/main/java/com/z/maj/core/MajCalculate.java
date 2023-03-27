@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.z.maj.exception.OcrException;
 
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -21,6 +20,7 @@ public class MajCalculate {
 
     private MajContext context;
 
+    private List<String> allNickNameList = MajPlayer.haoge.getAllNickName();
 
     /**
      * 算钱主程序
@@ -29,7 +29,8 @@ public class MajCalculate {
      */
     public MajContext calculate(String originStr) {
         //初始处理
-        String processStr = initProcess(originStr);
+        String processStr = preProcess(originStr);
+
 
         //获取玩家昵称列表,判定麻将种类
         Set<String> playerSet = playerAnalyse(processStr);
@@ -48,10 +49,25 @@ public class MajCalculate {
         return context;
     }
 
-    private String initProcess(String originStr) {
+    /**
+     * 预处理: 解决昵称扫描,与分数无空格,导致扫描不到该玩家的问题
+     * @param
+     * @return
+     * @throws
+     * @author zhaoxu
+     */
+    private String preProcess(String originStr) {
+
+        //预处理: 1. 解决昵称扫描问题 ,采用昵称精确扫描
+        for (String nickName:allNickNameList) {
+            originStr = originStr.replaceAll(nickName," "+ nickName + " ");
+
+        }
+        // 预处理2: 替换名字有数字的id
         String str = originStr.replace("sldk19","雨神");
         str = str.replace("stephen1943","zhaoxu");
-        //避免分数识别
+
+        // 预处理3 : 避免1位,2位,3位,4位,中的数字扫描
         str = str.replace("1位", " 一位");
         str = str.replace("2位", " 二位");
         str = str.replace("3位", " 三位");
@@ -66,7 +82,6 @@ public class MajCalculate {
      * @author zhaoxu
      */
     private  Set<String> playerAnalyse(String originStr) {
-        List<String> allNickNameList = MajPlayer.haoge.getAllNickName();
         Set<String> matches = new HashSet<>();
         Pattern pattern = Pattern.compile("\\b(" + String.join("|", allNickNameList) + ")\\b");
         Matcher matcher = pattern.matcher(originStr);
@@ -303,7 +318,13 @@ public class MajCalculate {
         HashMap<String, String> rankMap = Maps.newHashMap();
         for (String nickName : nickNameSet) {
             int index = s.indexOf(nickName);
-            String rank = s.substring(index - 3, index - 1);
+            //寻找玩家名字前面的排名
+            int rankIndex = index-1;
+            while (" ".equals(String.valueOf(s.charAt(rankIndex)))){
+                rankIndex--;
+            }
+            //SubString,左闭右开[)
+            String rank = s.substring(rankIndex - 1, rankIndex+1);
             rankMap.put(rank,nickName);
         }
 
