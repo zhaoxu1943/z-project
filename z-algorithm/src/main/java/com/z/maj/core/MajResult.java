@@ -14,6 +14,8 @@ public class MajResult implements Comparable<MajResult> {
 
     private BigDecimal money;
 
+    private BigDecimal changeMoney;
+
     private String nickName;
 
     private Integer rank;

@@ -11,7 +11,9 @@ public enum MajPlayer {
     zhanglei("毒瘤小张"),
     haoge("FeiClusell"),
     zhaolu("清寒亦寒"),
-    wangyu("雨神");
+    wangyu("雨神"),
+
+    hengshen("无敌衡神");
 
     private String nickName;
 

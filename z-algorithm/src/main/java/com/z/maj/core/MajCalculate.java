@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.z.maj.core.MajConfig.*;
 
@@ -20,7 +21,7 @@ public class MajCalculate {
 
     private MajContext context;
 
-    private List<String> allNickNameList = MajPlayer.haoge.getAllNickName();
+    private final List<String> allNickNameList = MajPlayer.haoge.getAllNickName();
 
     /**
      * 算钱主程序
@@ -141,8 +142,10 @@ public class MajCalculate {
         context.setTime(times);
         if (context.getType()==3) {
             context.setEveryTenThousandScoreRMB(TYPE_3_EVERY_TEN_THOUSAND_SCORE_RMB);
+            context.setScoreEveryTime(TYPE_3_SCORE);
         }else if (context.getType()==4) {
             context.setEveryTenThousandScoreRMB(TYPE_4_EVERY_TEN_THOUSAND_SCORE_RMB);
+            context.setScoreEveryTime(TYPE_4_SCORE);
         }
         context.setCreateTime(LocalDateTime.now());
     }
@@ -217,7 +220,8 @@ public class MajCalculate {
         for (String player:context.getPlayerNickNameSet()){
             MajResult playerResult = new MajResult();
             int scoreSum = getSum(resultMapList,player);
-            int baseScoreSum = context.getTime();
+            int baseScoreSum = context.getTime()*context.getScoreEveryTime();
+            BigDecimal baseMoney = moneyAll.divide(BigDecimal.valueOf(context.getType())).setScale(2, RoundingMode.HALF_UP);
             actuaSum+=scoreSum;
             BigDecimal percent = new BigDecimal(scoreSum).divide(new BigDecimal(sumAll),4,RoundingMode.HALF_UP);
             BigDecimal percentNum = percent.multiply(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP);
@@ -226,12 +230,52 @@ public class MajCalculate {
             playerResult.setPercent(percentNum);
             playerResult.setMoney(money);
             playerResult.setNickName(player);
+            playerResult.setWin(scoreSum>=baseScoreSum);
+            playerResult.setChangeMoney(money.subtract(baseMoney).abs());
+
+
+
             matchResultList.add(playerResult);
 
 
             matchResultList.sort(Comparator.comparing(MajResult::getScoreSum).reversed());
+            //排序后赋予名次
+            for (int i = 0; i < matchResultList.size(); i++) {
+                matchResultList.get(i).setRank(i+1);
+            }
 
         }
+
+
+        List<MajResult> winnerList = matchResultList.stream().filter(MajResult::isWin)
+                .sorted(Comparator.comparing(MajResult::getScoreSum).reversed()).collect(Collectors.toList());
+
+        List<MajResult> loserList = matchResultList.stream().filter(maj -> !maj.isWin())
+                .sorted(Comparator.comparing(MajResult::getScoreSum).reversed()).collect(Collectors.toList());
+
+        System.out.println(winnerList);
+
+        System.out.println(loserList);
+
+        if (context.getType()==3){
+            if (winnerList.size()==1){
+                //两次
+                for (MajResult loser:loserList) {
+                    System.out.println(loser.getNickName()+"向"+winnerList.get(0).getNickName()+"转"+loser.getChangeMoney()+"元");
+                }
+            }else{
+                for (MajResult winner:winnerList) {
+                    System.out.println(loserList.get(0).getNickName()+"向"+winner.getNickName()+"转"+winner.getChangeMoney()+"元");
+                }
+            }
+
+
+
+
+        }
+
+
+
         context.setMatchResultList(matchResultList);
 
         //validate ocr数据
