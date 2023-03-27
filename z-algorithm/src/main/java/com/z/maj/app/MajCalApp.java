@@ -40,7 +40,7 @@ public class MajCalApp {
 
         MajContext majContext = cal.calculate(origin);
         //进行maj存储
-        db.saveAfterQuery(majContext);
+       //db.saveAfterQuery(majContext);
     }
 
 

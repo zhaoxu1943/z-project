@@ -212,14 +212,25 @@ public class MajCalculate {
         }
 
         int actuaSum  = 0;
-        List<String> matchResultList = Lists.newArrayList();
+        List<MajResult> matchResultList = Lists.newArrayList();
+
         for (String player:context.getPlayerNickNameSet()){
-            int sum = getSum(resultMapList,player);
-            actuaSum+=sum;
-            BigDecimal percent = new BigDecimal(sum).divide(new BigDecimal(sumAll),4,RoundingMode.HALF_UP);
+            MajResult playerResult = new MajResult();
+            int scoreSum = getSum(resultMapList,player);
+            int baseScoreSum = context.getTime();
+            actuaSum+=scoreSum;
+            BigDecimal percent = new BigDecimal(scoreSum).divide(new BigDecimal(sumAll),4,RoundingMode.HALF_UP);
             BigDecimal percentNum = percent.multiply(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP);
             BigDecimal money = percent.multiply(moneyAll).setScale(2, RoundingMode.HALF_UP);
-            matchResultList.add(player+":总分:"+sum+",占比:"+percentNum+"%,钱:"+money+"元");
+            playerResult.setScoreSum(scoreSum);
+            playerResult.setPercent(percentNum);
+            playerResult.setMoney(money);
+            playerResult.setNickName(player);
+            matchResultList.add(playerResult);
+
+
+            matchResultList.sort(Comparator.comparing(MajResult::getScoreSum).reversed());
+
         }
         context.setMatchResultList(matchResultList);
 
@@ -315,7 +326,7 @@ public class MajCalculate {
         String s = originResultString.trim();
 
         Set<String> nickNameSet =  context.getPlayerNickNameSet();
-        HashMap<String, String> rankMap = Maps.newHashMap();
+        Map<String, String> rankMap = Maps.newTreeMap();
         for (String nickName : nickNameSet) {
             int index = s.indexOf(nickName);
             //寻找玩家名字前面的排名

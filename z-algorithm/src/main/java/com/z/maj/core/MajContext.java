@@ -30,18 +30,17 @@ public class MajContext {
      */
     private Set<String> playerNickNameSet;
 
+    /**
+     * 玩家排名map
+     * @author zhaoxu
+     */
+    private Map<String,Integer> allScoreMap;
 
     /**
      * 玩家数,根据上下文判定三麻还是四麻
      * @author zhaoxu
      */
     private int type;
-
-    /**
-     * 局数
-     * @author zhaoxu
-     */
-    private int time;
 
     /**
      * 每万分多少钱
@@ -52,6 +51,18 @@ public class MajContext {
      */
     private BigDecimal everyTenThousandScoreRMB;
 
+    /**
+     * 局数
+     * @author zhaoxu
+     */
+    private int time;
+
+    /**
+     * 每局点数
+     * @author zhaoxu
+     */
+    private int scoreEveryTime;
+
     private LocalDateTime createTime;
 
 
@@ -60,7 +71,7 @@ public class MajContext {
 
     private List<Map<String,Integer>> matchDetailList;
 
-    private List<String> matchResultList;
+    private List<MajResult> matchResultList;
 
 
     @Override
@@ -75,7 +86,7 @@ public class MajContext {
         }
         stringBuilder.append("对局结果:\n");
 
-        for (String s:matchResultList){
+        for (MajResult s:matchResultList){
             stringBuilder.append(s)
                     .append("\n");
         }
