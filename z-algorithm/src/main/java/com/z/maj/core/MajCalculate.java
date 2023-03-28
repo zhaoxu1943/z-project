@@ -268,13 +268,36 @@ public class MajCalculate {
                     System.out.println(loserList.get(0).getNickName()+"向"+winner.getNickName()+"转"+winner.getChangeMoney()+"元");
                 }
             }
+        }else if (context.getType()==4) {
+            if (winnerList.size() == 1) {
+                for (MajResult loser : loserList) {
+                    System.out.println(loser.getNickName() + "向" + winnerList.get(0).getNickName() + "转" + loser.getChangeMoney() + "元");
+                }
+
+            } else if (winnerList.size() == 2) {
+                //first step
+                // w1>w2 ,abs(l3)<abs(l4)
+                // w1+w2 = abs(l3)+abs(l4)
+                //so ,abs(l3)<= w1,即输钱少的人，一定小于等于第一位赢钱的
+                System.out.println(loserList.get(0).getNickName() + "向" + winnerList.get(0).getNickName() + "转" + loserList.get(0).getChangeMoney() + "元");
+
+                if (loserList.get(0).getChangeMoney().equals(winnerList.get(0).getChangeMoney())) {
+                    System.out.println(loserList.get(0).getNickName() + "向" + winnerList.get(0).getNickName() + "转" + loserList.get(0).getChangeMoney() + "元");
+                } else {
+                    System.out.println(loserList.get(1).getNickName() + "向" + winnerList.get(0).getNickName() + "转" + winnerList.get(0).getChangeMoney().subtract(loserList.get(0).getChangeMoney()) + "元");
+                    System.out.println(loserList.get(1).getNickName() + "向" + winnerList.get(1).getNickName() + "转" + winnerList.get(1).getChangeMoney() + "元");
+
+                }
 
 
+            } else {
+                for (MajResult winner : winnerList) {
+                    System.out.println(loserList.get(0).getNickName() + "向" + winner.getNickName() + "转" + winner.getChangeMoney() + "元");
+                }
 
+            }
 
         }
-
-
 
         context.setMatchResultList(matchResultList);
 
