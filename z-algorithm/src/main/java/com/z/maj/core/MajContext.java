@@ -2,8 +2,6 @@ package com.z.maj.core;
 
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -71,7 +69,14 @@ public class MajContext {
 
     private List<Map<String,Integer>> matchDetailList;
 
-    private List<MajResult> matchResultList;
+    private List<MajPlayerResult> matchResultList;
+
+
+    private List<MajPlayerResult> winnerList;
+
+    private List<MajPlayerResult> loserList;
+
+    private String transactionInfo;
 
 
     @Override
@@ -86,10 +91,21 @@ public class MajContext {
         }
         stringBuilder.append("对局结果:\n");
 
-        for (MajResult s:matchResultList){
+        stringBuilder.append("赢钱:\n");
+        for (MajPlayerResult s:winnerList){
             stringBuilder.append(s)
                     .append("\n");
         }
+
+        stringBuilder.append("输钱:\n");
+        for (MajPlayerResult s:loserList){
+            stringBuilder.append(s)
+                    .append("\n");
+        }
+
+        stringBuilder.append("转账信息:\n");
+        stringBuilder.append(transactionInfo);
+
 
         return stringBuilder.toString();
     }

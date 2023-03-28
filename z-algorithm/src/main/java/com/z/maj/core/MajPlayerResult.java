@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class MajResult implements Comparable<MajResult> {
+public class MajPlayerResult implements Comparable<MajPlayerResult> {
 
 
     private Integer scoreSum;
@@ -23,19 +23,17 @@ public class MajResult implements Comparable<MajResult> {
     private boolean isWin;
 
     @Override
-    public int compareTo(MajResult o) {
+    public int compareTo(MajPlayerResult o) {
         return o.scoreSum-this.scoreSum;
     }
 
     @Override
     public String toString() {
-        return "MajResult{" +
-                "scoreSum=" + scoreSum +
-                ", percent=" + percent +
-                ", money=" + money +
-                ", nickName='" + nickName + '\'' +
-                ", rank=" + rank +
-                ", isWin=" + isWin +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("第").append(rank).append("名:").append(nickName)
+                .append(isWin?"赢钱":"输钱")
+                .append(changeMoney)
+                .append("元");
+        return sb.toString();
     }
 }

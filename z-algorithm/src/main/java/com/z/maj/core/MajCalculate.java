@@ -3,6 +3,7 @@ package com.z.maj.core;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.z.maj.config.MajPlayer;
 import com.z.maj.exception.OcrException;
 
 import java.math.BigDecimal;
@@ -14,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.z.maj.core.MajConfig.*;
+import static com.z.maj.config.MajConfig.*;
 
 public class MajCalculate {
 
@@ -29,29 +30,33 @@ public class MajCalculate {
      * @author zhaoxu
      */
     public MajContext calculate(String originStr) {
-        //初始处理
+        //字符串预处理
         String processStr = preProcess(originStr);
 
-
+        //计算数据准备
         //获取玩家昵称列表,判定麻将种类
         Set<String> playerSet = playerAnalyse(processStr);
-        //分割串,解析局数
+        //字符串分割,解析局数
         List<String> originResultList = convertStringToList(processStr);
+
+
+        //初始化上下文
         //基于上述信息,初始化上下文
         initMajContext(playerSet,originResultList.size());
+        //将每局解析为map
+        List<Map<String, Integer>> resultMapList = convertToMap(originResultList);
         //生成对局信息
         createMatchInfo();
-        //进一步将每局解析为map
-        List<Map<String, Integer>> resultMapList = convertToMap(originResultList);
         //计算总分,总钱数,如果OCR异常则抛出
         calculateAndValidate(resultMapList);
+
         //输出结果
         System.out.println(context);
         return context;
     }
 
     /**
-     * 预处理: 解决昵称扫描,与分数无空格,导致扫描不到该玩家的问题
+     * 字符串预处理: 解决昵称扫描,与分数无空格,导致扫描不到该玩家的问题
      * @param
      * @return
      * @throws
@@ -59,7 +64,7 @@ public class MajCalculate {
      */
     private String preProcess(String originStr) {
 
-        //预处理: 1. 解决昵称扫描问题 ,采用昵称精确扫描
+        //字符串预处理: 1. 解决昵称扫描问题 ,采用昵称精确扫描
         for (String nickName:allNickNameList) {
             originStr = originStr.replaceAll(nickName," "+ nickName + " ");
 
@@ -104,6 +109,8 @@ public class MajCalculate {
             return spilt(originStr, CHANG_CI);
         }else if (originStr.contains(CHANG_CI_TRAD)) {
             return spilt(originStr, CHANG_CI_TRAD);
+        }else if (originStr.contains(CHANG_CI_TRAD_PC)){
+            return spilt(originStr,CHANG_CI_TRAD_PC);
         }else {
             throw new OcrException("spilt异常,无友人场或相关字样");
         }
@@ -172,18 +179,7 @@ public class MajCalculate {
         stringBuilder.append("圈,");
         stringBuilder.append("每万分");
         stringBuilder.append(context.getEveryTenThousandScoreRMB());
-        stringBuilder.append("元,");
-        if (context.getType()==3){
-            stringBuilder.append("每人交");
-            BigDecimal money = context.getEveryTenThousandScoreRMB().multiply(BigDecimal.valueOf(3.50)).multiply(new BigDecimal(context.getTime()));
-            stringBuilder.append(money);
-            stringBuilder.append("元");
-        }else if (context.getType()==4){
-            stringBuilder.append("每人交");
-            BigDecimal money = context.getEveryTenThousandScoreRMB().multiply(BigDecimal.valueOf(2.50)).multiply(new BigDecimal(context.getTime()));
-            stringBuilder.append(money);
-            stringBuilder.append("元");
-        }
+        stringBuilder.append("元");
         context.setMatchInfo(stringBuilder.toString());
     }
 
@@ -215,10 +211,10 @@ public class MajCalculate {
         }
 
         int actuaSum  = 0;
-        List<MajResult> matchResultList = Lists.newArrayList();
-
+        // 创建选手结果存储,并根据分数排序
+        List<MajPlayerResult> matchResultList = Lists.newArrayList();
         for (String player:context.getPlayerNickNameSet()){
-            MajResult playerResult = new MajResult();
+            MajPlayerResult playerResult = new MajPlayerResult();
             int scoreSum = getSum(resultMapList,player);
             int baseScoreSum = context.getTime()*context.getScoreEveryTime();
             BigDecimal baseMoney = moneyAll.divide(BigDecimal.valueOf(context.getType())).setScale(2, RoundingMode.HALF_UP);
@@ -232,46 +228,67 @@ public class MajCalculate {
             playerResult.setNickName(player);
             playerResult.setWin(scoreSum>=baseScoreSum);
             playerResult.setChangeMoney(money.subtract(baseMoney).abs());
-
-
-
             matchResultList.add(playerResult);
-
-
-            matchResultList.sort(Comparator.comparing(MajResult::getScoreSum).reversed());
+            matchResultList.sort(Comparator.comparing(MajPlayerResult::getScoreSum).reversed());
             //排序后赋予名次
             for (int i = 0; i < matchResultList.size(); i++) {
                 matchResultList.get(i).setRank(i+1);
             }
-
         }
 
 
-        List<MajResult> winnerList = matchResultList.stream().filter(MajResult::isWin)
-                .sorted(Comparator.comparing(MajResult::getScoreSum).reversed()).collect(Collectors.toList());
+        context.setMatchResultList(matchResultList);
 
-        List<MajResult> loserList = matchResultList.stream().filter(maj -> !maj.isWin())
-                .sorted(Comparator.comparing(MajResult::getScoreSum).reversed()).collect(Collectors.toList());
+        List<MajPlayerResult> winnerList = matchResultList.stream().filter(MajPlayerResult::isWin)
+                .sorted(Comparator.comparing(MajPlayerResult::getScoreSum).reversed()).collect(Collectors.toList());
 
-        System.out.println(winnerList);
+        List<MajPlayerResult> loserList = matchResultList.stream().filter(maj -> !maj.isWin())
+                .sorted(Comparator.comparing(MajPlayerResult::getScoreSum).reversed()).collect(Collectors.toList());
 
-        System.out.println(loserList);
+        context.setWinnerList(winnerList);
+        context.setLoserList(loserList);
 
+
+        //validate ocr数据
+        if (actuaSum!=sumAll){
+            throw new OcrException("扫描异常,扫描总分"+(actuaSum)+"不等于总分"+sumAll+"请重新扫描");
+        }
+
+        transCal(winnerList, loserList);
+
+
+    }
+
+    /**
+     * 转账计算
+     * @param
+     * @return
+     * @throws
+     * @author zhaoxu
+     */
+    private void transCal(List<MajPlayerResult> winnerList, List<MajPlayerResult> loserList) {
+        //转账计算
+        StringBuilder transactionInfo = new StringBuilder();
         if (context.getType()==3){
             if (winnerList.size()==1){
                 //两次
-                for (MajResult loser:loserList) {
-                    System.out.println(loser.getNickName()+"向"+winnerList.get(0).getNickName()+"转"+loser.getChangeMoney()+"元");
+                for (MajPlayerResult loser: loserList) {
+                    transactionInfo.append(loser.getNickName())
+                            .append("向")
+                            .append(winnerList.get(0).getNickName())
+                            .append("转")
+                            .append(loser.getChangeMoney())
+                            .append("元\n");
                 }
             }else{
-                for (MajResult winner:winnerList) {
-                    System.out.println(loserList.get(0).getNickName()+"向"+winner.getNickName()+"转"+winner.getChangeMoney()+"元");
+                for (MajPlayerResult winner: winnerList) {
+                    transactionInfo.append(loserList.get(0).getNickName()).append("向").append(winner.getNickName()).append("转").append(winner.getChangeMoney()).append("元\n");
                 }
             }
         }else if (context.getType()==4) {
             if (winnerList.size() == 1) {
-                for (MajResult loser : loserList) {
-                    System.out.println(loser.getNickName() + "向" + winnerList.get(0).getNickName() + "转" + loser.getChangeMoney() + "元");
+                for (MajPlayerResult loser : loserList) {
+                    transactionInfo.append(loser.getNickName()).append("向").append(winnerList.get(0).getNickName()).append("转").append(loser.getChangeMoney()).append("元\n");
                 }
 
             } else if (winnerList.size() == 2) {
@@ -279,32 +296,24 @@ public class MajCalculate {
                 // w1>w2 ,abs(l3)<abs(l4)
                 // w1+w2 = abs(l3)+abs(l4)
                 //so ,abs(l3)<= w1,即输钱少的人，一定小于等于第一位赢钱的
-                System.out.println(loserList.get(0).getNickName() + "向" + winnerList.get(0).getNickName() + "转" + loserList.get(0).getChangeMoney() + "元");
+                transactionInfo.append(loserList.get(0).getNickName()).append("向").append(winnerList.get(0).getNickName()).append("转").append(loserList.get(0).getChangeMoney()).append("元\n");
 
                 if (loserList.get(0).getChangeMoney().equals(winnerList.get(0).getChangeMoney())) {
-                    System.out.println(loserList.get(0).getNickName() + "向" + winnerList.get(0).getNickName() + "转" + loserList.get(0).getChangeMoney() + "元");
+                    transactionInfo.append(loserList.get(0).getNickName()).append("向").append(winnerList.get(0).getNickName()).append("转").append(loserList.get(0).getChangeMoney()).append("元\n");
                 } else {
-                    System.out.println(loserList.get(1).getNickName() + "向" + winnerList.get(0).getNickName() + "转" + winnerList.get(0).getChangeMoney().subtract(loserList.get(0).getChangeMoney()) + "元");
-                    System.out.println(loserList.get(1).getNickName() + "向" + winnerList.get(1).getNickName() + "转" + winnerList.get(1).getChangeMoney() + "元");
+                    transactionInfo.append(loserList.get(1).getNickName()).append("向").append(winnerList.get(0).getNickName()).append("转").append(winnerList.get(0).getChangeMoney().subtract(loserList.get(0).getChangeMoney())).append("元\n");
+                    transactionInfo.append(loserList.get(1).getNickName()).append("向").append(winnerList.get(1).getNickName()).append("转").append(winnerList.get(1).getChangeMoney()).append("元\n");
 
                 }
-
-
             } else {
-                for (MajResult winner : winnerList) {
-                    System.out.println(loserList.get(0).getNickName() + "向" + winner.getNickName() + "转" + winner.getChangeMoney() + "元");
+                for (MajPlayerResult winner : winnerList) {
+                    transactionInfo.append(loserList.get(0).getNickName()).append("向").append(winner.getNickName()).append("转").append(winner.getChangeMoney()).append("元\n");
                 }
 
             }
 
         }
-
-        context.setMatchResultList(matchResultList);
-
-        //validate ocr数据
-        if (actuaSum!=sumAll){
-            throw new OcrException("扫描异常,扫描总分"+(actuaSum)+"不等于总分"+sumAll+"请重新扫描");
-        }
+        context.setTransactionInfo(transactionInfo.toString());
     }
 
     /**

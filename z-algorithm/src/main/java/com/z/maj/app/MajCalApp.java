@@ -14,8 +14,7 @@ public class MajCalApp {
         MajCalculate cal = new MajCalculate();
         MajDataBase db = new MajDataBaseImpl();
 
-        String origin =
-                "友人塌\n" +
+        String origin ="友人塌\n" +
                 "1位 FeiClusell\n" +
                 "3位 stephen1943\n" +
                 "2位 吃肉的山羊72000\n" +
@@ -41,7 +40,7 @@ public class MajCalApp {
 
         MajContext majContext = cal.calculate(origin);
         //进行maj存储
-       //db.saveAfterQuery(majContext);
+        db.saveAfterQuery(majContext);
     }
 
 
