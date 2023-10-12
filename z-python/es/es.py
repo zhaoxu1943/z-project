@@ -56,6 +56,9 @@ def process_file():
         # 使用批量插入API执行批量插入操作
         bulk(es, bulk_data)
 
+        # 刷新Elasticsearch以确保数据立即可见
+        es.indices.refresh(index=index_name)
+
 
 # 统计运行时间
 start_time = time.time()
