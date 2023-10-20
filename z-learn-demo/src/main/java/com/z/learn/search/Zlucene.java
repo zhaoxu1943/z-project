@@ -41,8 +41,7 @@ public class Zlucene {
     public static void createIndexANDSearchIndex() throws Exception{
         Analyzer analyzer = new StandardAnalyzer();//标准分词器
         //RAMDirectory内存字典存储索引
-        Directory directory = new RAMDirectory();
-        //Directory directory = FSDirectory.open("/tmp/testindex");磁盘存储索引
+        Directory directory = FSDirectory.open(Paths.get("C:\\Users\\46315\\lucene"));
 
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(directory,config);
@@ -50,6 +49,19 @@ public class Zlucene {
         String text = "hello world main test";
         document.add(new Field("filetest",text, TextField.TYPE_STORED)); //将域field添加到document中
         writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+        writer.addDocument(document);
+
         writer.close();
 
 
