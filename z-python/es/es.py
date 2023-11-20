@@ -16,11 +16,11 @@ json_str = '{"took":3202,"timed_out":false,"_shards":{"total":5,"successful":5,"
 json_data = json.loads(json_str)
 
 # 单次请求,发送data的批次
-batch = 30
+batch = 15
 # 循环次数
-max_forTime = 20
+max_forTime = 99999999
 # 自定义进程数量
-max_processes = 20
+max_processes = 15
 total = max_forTime * max_processes * batch * 10
 
 
