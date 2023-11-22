@@ -8,6 +8,6 @@ def slow_pow(num, power):
 
 
 if __name__ == '__main__':
-    a = 2
-    n = 3
+    a = 3
+    n = 13
     print(slow_pow(a, n))
