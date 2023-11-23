@@ -1,3 +1,6 @@
+import time
+
+
 # 快速幂算法计算
 
 
@@ -14,19 +17,19 @@
 
 def binary_exp(num, power):
     res = 1
-    init = num
     while power != 0:
-        temp = init * init
-        init = temp
-        if (power & 1 == 1):
-            res = res * temp
-        else:
-            res = res * 1
+        if power & 1 == 1:
+            res = res * num
+        num = num * num
         power = power >> 1
     return res
 
 
 if __name__ == '__main__':
     a = 3
-    n = 3
+    n = 150000
+    start_time = time.time()
     print(binary_exp(a, n))
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print("函数执行时间：", execution_time, "秒")
